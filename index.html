@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="login()">Login</button>
+
+    <div>
+        <img id="captchaImg">
+    </div>
+
+    <input id="username">
+    <input id="password">
+    <input id="captcha">
+
+    <button onclick="submit()">Submit</button>
+
+    <script>
+
+        function login() {
+            document.getElementById("captchaImg").src =
+                "https://a984-14-176-232-32.ngrok-free.app/start-login";
+        }
+
+function submit() {
+
+    fetch("https://a984-14-176-232-32.ngrok-free.app/submit-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+            captcha: document.getElementById("captcha").value
+        })
+    })
+    .then(response => response.blob())
+    .then(blob => {
+
+        const url = URL.createObjectURL(blob);
+
+        document.getElementById("captchaImg").src = url;
+
+    });
+
+}
+
+    </script>
+</body>
+
+</html>
