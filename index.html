@@ -14,41 +14,38 @@
         <img id="captchaImg">
     </div>
 
-    <input id="username">
-    <input id="password">
-    <input id="captcha">
+    <input id="username" placeholder="Username">
+    <input id="password" placeholder="Password" type="password">
+    <input id="captcha" placeholder="Captcha">
 
-    <button onclick="submit()">Submit</button>
+    <button onclick="submitLogin()">Submit</button>
 
     <script>
+        const BASE_URL = "https://a984-14-176-232-32.ngrok-free.app";
+        const HEADERS = {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "true"
+        };
 
-        function login() {
-            document.getElementById("captchaImg").src =
-                "https://a984-14-176-232-32.ngrok-free.app/start-login";
+        async function login() {
+            const res = await fetch(`${BASE_URL}/start-login`, { headers: HEADERS });
+            const data = await res.json();
+            document.getElementById("captchaImg").src = data.image;
         }
 
-function submit() {
-
-    fetch("https://a984-14-176-232-32.ngrok-free.app/submit-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: document.getElementById("username").value,
-            password: document.getElementById("password").value,
-            captcha: document.getElementById("captcha").value
-        })
-    })
-    .then(response => response.blob())
-    .then(blob => {
-
-        const url = URL.createObjectURL(blob);
-
-        document.getElementById("captchaImg").src = url;
-
-    });
-
-}
-
+        async function submitLogin() {
+            const res = await fetch(`${BASE_URL}/submit-login`, {
+                method: "POST",
+                headers: HEADERS,
+                body: JSON.stringify({
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value,
+                    captcha: document.getElementById("captcha").value
+                })
+            });
+            const data = await res.json();
+            document.getElementById("captchaImg").src = data.image;
+        }
     </script>
 </body>
 
